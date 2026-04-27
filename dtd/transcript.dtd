@@ -1,0 +1,119 @@
+<!-- Root element -->
+<!ELEMENT academic_transcript (board_info, grading_scale, student_info, examination_info, subjects, results, footer)>
+<!ATTLIST academic_transcript
+    version CDATA #REQUIRED
+    lang CDATA #REQUIRED
+    xmlns:xsi CDATA #IMPLIED
+>
+
+<!-- Bilingual text nodes -->
+<!ELEMENT fr (#PCDATA)>
+<!ELEMENT en (#PCDATA)>
+
+<!-- Institution information -->
+<!ELEMENT board_info (board_name, country, exam_title, serial_no)>
+
+<!ELEMENT board_name (fr, en)>
+<!ELEMENT country (fr, en)>
+<!ELEMENT exam_title (fr, en)>
+
+<!ELEMENT serial_no (#PCDATA)>
+<!ATTLIST serial_no
+    prefix CDATA #REQUIRED
+    number CDATA #REQUIRED
+>
+
+<!-- Grading scale definition -->
+<!ELEMENT grading_scale (grade_entry+)>
+
+<!ELEMENT grade_entry (letter_grade, class_interval, grade_point, mention)>
+
+<!ELEMENT letter_grade (#PCDATA)>
+<!ELEMENT class_interval (#PCDATA)>
+<!ELEMENT grade_point (#PCDATA)>
+<!ELEMENT mention (fr, en)>
+
+<!-- Student information -->
+<!ELEMENT student_info (
+    gbtsl_no,
+    student_name,
+    father_name,
+    mother_name,
+    institution,
+    centre,
+    roll_no,
+    registration_no,
+    type,
+    date_of_birth,
+    group
+)>
+
+<!ELEMENT gbtsl_no (#PCDATA)>
+<!ELEMENT student_name (#PCDATA)>
+<!ELEMENT father_name (#PCDATA)>
+<!ELEMENT mother_name (#PCDATA)>
+
+<!ELEMENT institution (fr, en)>
+<!ATTLIST institution
+    code CDATA #REQUIRED
+>
+
+<!ELEMENT centre (fr, en)>
+<!ATTLIST centre
+    code CDATA #REQUIRED
+>
+
+<!ELEMENT roll_no (#PCDATA)>
+
+<!ELEMENT registration_no (#PCDATA)>
+<!ATTLIST registration_no
+    academic_year CDATA #REQUIRED
+>
+
+<!ELEMENT type (fr, en)>
+
+<!ELEMENT date_of_birth (#PCDATA)>
+<!ATTLIST date_of_birth
+    format CDATA #REQUIRED
+>
+
+<!ELEMENT group (fr, en)>
+
+<!-- Examination information -->
+<!ELEMENT examination_info (exam_year, publication_date)>
+
+<!ELEMENT exam_year (#PCDATA)>
+<!ELEMENT publication_date (fr, en)>
+
+<!-- Subjects container -->
+<!ELEMENT subjects (mandatory_subjects, optional_subjects, continuous_assessment)>
+
+<!ELEMENT mandatory_subjects (subject+)>
+<!ELEMENT optional_subjects (subject+)>
+<!ELEMENT continuous_assessment (subject+)>
+
+<!ELEMENT subject (subject_name, letter_grade, grade_point)>
+<!ATTLIST subject
+    sl_no CDATA #REQUIRED
+    type (mandatory | optional | continuous) #REQUIRED
+>
+
+<!ELEMENT subject_name (fr, en)>
+
+<!-- Results section -->
+<!ELEMENT results (
+    gpa_without_optional,
+    gpa_above_optional,
+    final_gpa,
+    mention
+)>
+
+<!ELEMENT gpa_without_optional (#PCDATA)>
+<!ELEMENT gpa_above_optional (#PCDATA)>
+<!ELEMENT final_gpa (#PCDATA)>
+
+<!-- Footer section -->
+<!ELEMENT footer (compared_by?, controller)>
+
+<!ELEMENT compared_by (#PCDATA)>
+<!ELEMENT controller (fr, en)>

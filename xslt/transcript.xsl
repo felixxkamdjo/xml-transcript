@@ -12,7 +12,7 @@
         doctype-system=""
     />
 
-    <!-- Bilingual rendering template -->
+    <!-- Bilingual content rendering -->
     <xsl:template match="*" mode="bilingual">
         <span class="bilingual">
             <span class="lang-fr">
@@ -24,7 +24,7 @@
         </span>
     </xsl:template>
 
-    <!-- Root template -->
+    <!-- Root document template -->
     <xsl:template match="/">
         <html lang="fr-en">
         <head>
@@ -44,7 +44,7 @@
         </html>
     </xsl:template>
 
-    <!-- Main document template -->
+    <!-- Main transcript structure -->
     <xsl:template match="academic_transcript">
         <div class="document">
             <div class="border-outer">
@@ -57,12 +57,12 @@
                     </div>
                     <div class="header-center">
 
-                        <!-- Institution name -->
+                        <!-- Institution information -->
                         <p class="board-name">
                             <xsl:apply-templates select="board_info/board_name" mode="bilingual"/>
                         </p>
 
-                        <!-- Country -->
+                        <!-- Country information -->
                         <p class="country">
                             <xsl:apply-templates select="board_info/country" mode="bilingual"/>
                         </p>
@@ -72,7 +72,7 @@
                             <xsl:apply-templates select="board_info/exam_title" mode="bilingual"/>
                         </h1>
 
-                        <!-- Serial information -->
+                        <!-- Serial details -->
                         <div class="serial-line">
                             <span class="label">
                                 <span class="bilingual">
@@ -93,25 +93,25 @@
 
                     </div>
                     <div class="header-right">
-                        <!-- FIXED: grading_scale table now renders the grading scale, not subjects -->
+                        <!-- Grading scale rendering -->
                         <xsl:apply-templates select="grading_scale"/>
                     </div>
                 </header>
 
-                <!-- Student information -->
+                <!-- Student section -->
                 <section class="student-section">
                     <xsl:apply-templates select="student_info"/>
                 </section>
 
                 <!-- Subjects section -->
                 <section class="subjects-section">
-                    <!-- FIXED: now calls the subjects template with results -->
+                    <!-- Subjects rendering with results context -->
                     <xsl:apply-templates select="subjects">
                         <xsl:with-param name="results" select="results"/>
                     </xsl:apply-templates>
                 </section>
 
-                <!-- Footer -->
+                <!-- Footer section -->
                 <footer class="doc-footer">
                     <xsl:apply-templates select="examination_info"/>
                     <xsl:apply-templates select="footer"/>
@@ -122,9 +122,7 @@
         </div>
     </xsl:template>
 
-    <!-- ============================================================
-         FIXED: Grading scale table — renders the grading scale only
-         ============================================================ -->
+    <!-- Grading scale table -->
     <xsl:template match="grading_scale">
         <table class="grading-table">
             <thead>
@@ -179,9 +177,7 @@
         </table>
     </xsl:template>
 
-    <!-- ============================================================
-         FIXED: Student information — now complete with all fields
-         ============================================================ -->
+    <!-- Student information block -->
     <xsl:template match="student_info">
         <div class="student-grid">
             <div class="student-col">
@@ -247,7 +243,7 @@
                     <span class="field-label">
                         <span class="bilingual">
                             <span class="lang-fr">Etablissement</span>
-                            <span class="lang-en">Name of Institution</span>
+                            <span class="lang-en">Institution</span>
                         </span>
                     </span>
                     <span class="field-sep">:</span>
@@ -261,7 +257,7 @@
                     <span class="field-label">
                         <span class="bilingual">
                             <span class="lang-fr">Centre</span>
-                            <span class="lang-en">Name of Centre</span>
+                            <span class="lang-en">Centre</span>
                         </span>
                     </span>
                     <span class="field-sep">:</span>
@@ -277,7 +273,7 @@
 
             <div class="student-col">
 
-                <!-- Roll No -->
+                <!-- Roll number -->
                 <div class="field-row">
                     <span class="field-label">
                         <span class="bilingual">
@@ -291,7 +287,7 @@
                     </span>
                 </div>
 
-                <!-- Registration No -->
+                <!-- Registration number -->
                 <div class="field-row">
                     <span class="field-label">
                         <span class="bilingual">
@@ -321,7 +317,7 @@
                     </span>
                 </div>
 
-                <!-- Date of birth -->
+                <!-- Birth date -->
                 <div class="field-row">
                     <span class="field-label">
                         <span class="bilingual">
@@ -335,7 +331,7 @@
                     </span>
                 </div>
 
-                <!-- Group / Filiere -->
+                <!-- Group -->
                 <div class="field-row">
                     <span class="field-label">
                         <span class="bilingual">
@@ -353,9 +349,7 @@
         </div>
     </xsl:template>
 
-    <!-- ============================================================
-         FIXED: Subjects table — now renders all subject sections
-         ============================================================ -->
+    <!-- Subject rendering -->
     <xsl:template match="subjects">
         <xsl:param name="results"/>
         <table class="subjects-table">
@@ -370,30 +364,30 @@
                     <th style="width:46%">
                         <span class="bilingual">
                             <span class="lang-fr">Matiere</span>
-                            <span class="lang-en">Name of Subjects</span>
+                            <span class="lang-en">Subjects</span>
                         </span>
                     </th>
                     <th style="width:10%">
                         <span class="bilingual">
                             <span class="lang-fr">Note</span>
-                            <span class="lang-en">Letter Grade</span>
+                            <span class="lang-en">Grade</span>
                         </span>
                     </th>
                     <th style="width:10%">
                         <span class="bilingual">
                             <span class="lang-fr">Points</span>
-                            <span class="lang-en">Grade Point</span>
+                            <span class="lang-en">Points</span>
                         </span>
                     </th>
                     <th style="width:15%">
                         <span class="bilingual">
-                            <span class="lang-fr">Moy. Sans Option</span>
-                            <span class="lang-en">GPA (w/o optional)</span>
+                            <span class="lang-fr">GPA sans option</span>
+                            <span class="lang-en">GPA without option</span>
                         </span>
                     </th>
                     <th style="width:15%">
                         <span class="bilingual">
-                            <span class="lang-fr">Moyenne Finale</span>
+                            <span class="lang-fr">GPA final</span>
                             <span class="lang-en">Final GPA</span>
                         </span>
                     </th>
@@ -401,7 +395,7 @@
             </thead>
             <tbody>
 
-                <!-- Section label: Mandatory subjects -->
+                <!-- Mandatory section -->
                 <tr class="section-label-row">
                     <td colspan="6">
                         <span class="bilingual">
@@ -411,7 +405,6 @@
                     </td>
                 </tr>
 
-                <!-- Mandatory subjects rows -->
                 <xsl:for-each select="mandatory_subjects/subject">
                     <xsl:call-template name="subject-row">
                         <xsl:with-param name="results" select="$results"/>
@@ -420,7 +413,7 @@
                     </xsl:call-template>
                 </xsl:for-each>
 
-                <!-- Section label: Optional subjects -->
+                <!-- Optional section -->
                 <tr class="section-label-row">
                     <td colspan="6">
                         <span class="bilingual">
@@ -430,7 +423,6 @@
                     </td>
                 </tr>
 
-                <!-- Optional subjects rows -->
                 <xsl:for-each select="optional_subjects/subject">
                     <xsl:call-template name="subject-row">
                         <xsl:with-param name="results" select="$results"/>
@@ -439,35 +431,38 @@
                     </xsl:call-template>
                 </xsl:for-each>
 
-                <!-- Section label: Continuous assessment -->
+                <!-- Continuous assessment -->
                 <tr class="section-label-row">
                     <td colspan="6">
                         <span class="bilingual">
                             <span class="lang-fr">Evaluation Continue</span>
-                            <span class="lang-en">Subjects of Continuous Assessment</span>
+                            <span class="lang-en">Continuous Assessment</span>
                         </span>
                     </td>
                 </tr>
 
-                <!-- Continuous assessment rows -->
                 <xsl:for-each select="continuous_assessment/subject">
                     <xsl:call-template name="subject-row">
                         <xsl:with-param name="results" select="$results"/>
                     </xsl:call-template>
                 </xsl:for-each>
 
-                <!-- Result summary row -->
+                <!-- Final result row -->
                 <tr>
-                    <td colspan="4" style="text-align:right; padding-right:8px;">
+                    <td colspan="4" style="text-align:right;">
                         <span class="bilingual">
-                            <span class="lang-fr" style="font-size:0.78rem;">Mention : <xsl:value-of select="$results/mention/fr"/></span>
-                            <span class="lang-en" style="font-size:0.68rem;">Mention: <xsl:value-of select="$results/mention/en"/></span>
+                            <span class="lang-fr">
+                                Mention : <xsl:value-of select="$results/mention/fr"/>
+                            </span>
+                            <span class="lang-en">
+                                Mention: <xsl:value-of select="$results/mention/en"/>
+                            </span>
                         </span>
                     </td>
                     <td class="gpa-cell">
                         <xsl:value-of select="$results/gpa_without_optional"/>
                     </td>
-                    <td class="gpa-cell final-gpa">
+                    <td class="gpa-cell">
                         <xsl:value-of select="$results/final_gpa"/>
                     </td>
                 </tr>
@@ -476,9 +471,7 @@
         </table>
     </xsl:template>
 
-    <!-- ============================================================
-         Helper: renders a single subject row
-         ============================================================ -->
+    <!-- Single subject row -->
     <xsl:template name="subject-row">
         <xsl:param name="results"/>
         <xsl:param name="is-last-mandatory" select="false()"/>
@@ -487,67 +480,51 @@
             <td style="text-align:center;">
                 <xsl:value-of select="@sl_no"/>
             </td>
-            <td class="subject-name-cell">
+            <td>
                 <div class="lang-fr"><xsl:value-of select="subject_name/fr"/></div>
                 <div class="lang-en"><xsl:value-of select="subject_name/en"/></div>
             </td>
-            <td class="gpa-cell">
+            <td style="text-align:center;">
                 <xsl:value-of select="letter_grade"/>
             </td>
-            <td class="gpa-cell">
+            <td style="text-align:center;">
                 <xsl:value-of select="grade_point"/>
             </td>
-            <!-- GPA without optional: show on last mandatory row, spanning remaining rows -->
-            <td class="gpa-cell">
+            <td>
                 <xsl:if test="$is-last-mandatory">
                     <xsl:value-of select="$results/gpa_without_optional"/>
                 </xsl:if>
                 <xsl:if test="$show-gpa-optional">
-                    <span class="bilingual" style="font-size:0.65rem;">
-                        <span class="lang-fr">GP Option</span>
-                        <span class="lang-en">GP Option</span>
-                    </span>
-                    <br/>
                     <xsl:value-of select="$results/gpa_above_optional"/>
                 </xsl:if>
             </td>
-            <!-- Final GPA: show only on last mandatory row -->
-            <td class="gpa-cell">
+            <td>
                 <xsl:if test="$is-last-mandatory">
-                    <span class="final-gpa"><xsl:value-of select="$results/final_gpa"/></span>
+                    <xsl:value-of select="$results/final_gpa"/>
                 </xsl:if>
             </td>
         </tr>
     </xsl:template>
 
-    <!-- ============================================================
-         Examination info (footer left)
-         ============================================================ -->
+    <!-- Examination footer info -->
     <xsl:template match="examination_info">
         <div class="footer-left">
             <span class="bilingual">
                 <span class="lang-fr">
-                    Date de Publication des Resultats :
+                    Publication Date:
                     <strong><xsl:value-of select="publication_date/fr"/></strong>
                 </span>
                 <span class="lang-en">
-                    Date of Publication of Result:
+                    Publication Date:
                     <strong><xsl:value-of select="publication_date/en"/></strong>
                 </span>
-            </span>
-            <br/>
-            <span class="bilingual" style="font-size:0.72rem; margin-top:6px; display:block;">
-                <span class="lang-fr">Verifie par / </span>
-                <span class="lang-en">Compared By ___________</span>
             </span>
         </div>
     </xsl:template>
 
-    <!-- ============================================================
-         Footer right (controller signature)
-         ============================================================ -->
+    <!-- Signature footer -->
     <xsl:template match="footer">
-        <div class="footer-right" style="text-align:center;">
+        <div class="footer-right">
             <div class="signature-line"></div>
             <span class="bilingual">
                 <span class="lang-fr"><xsl:value-of select="controller/fr"/></span>

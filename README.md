@@ -2,13 +2,12 @@
 
 **Cours :** Introduction au langage XML
 **Type :** Projet individuel
-**Niveau :** Licence
 
 ---
 
 ## Contexte
 
-Dans le cadre du cours d'Introduction au langage XML, il nous a été demandé de réaliser, en respectant toutes les bonnes pratiques du langage, la modélisation XML d'un document réel au choix : bulletin de notes, facture, bon de commande, fiche de paie, ou tout autre document structuré.
+Dans le cadre du cours d'Introduction au langage XML, il nous a été demandé de réaliser, en respectant toutes les bonnes pratiques du langage, la modélisation XML d'un document réel au choix : bulletin de notes, facture.
 
 Pour ce projet, j'ai choisi de reproduire un **bulletin de notes académique** dont j'ai trouvé le modèle sur Pinterest. Le modèle original (image de référence) est inclus dans le dossier `assets/` du projet afin d'illustrer la fidélité de la reproduction.
 
@@ -123,10 +122,10 @@ Plusieurs options selon l'environnement disponible :
 ### Option 1 — Via Makefile (recommandé)
 
 ```bash
-# Transformer XML → HTML et ouvrir le résultat
+# Transformer XML en HTML et ouvre le résultat
 make all
 
-# Transformer XML → HTML uniquement
+# Transformer XML en HTML uniquement
 make build
 
 # Valider le XML contre la DTD
@@ -173,18 +172,6 @@ make validate
 ```
 
 Un retour silencieux indique que le document est **bien formé et valide**.
-
----
-
-## Informations du document reproduit
-
-| Champ | Valeur |
-|-------|--------|
-| Établissement | Board of Intermediate and Secondary Education, Chattogram |
-| Pays | Bangladesh |
-| Examen | Secondary School Certificate — 2022 |
-| Étudiant(e) | Arpita Jahan Oyshi |
-| GPA final | 5.00 |
 
 ---
 

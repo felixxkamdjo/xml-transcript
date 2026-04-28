@@ -24,6 +24,7 @@ Le document choisi est un relevé de notes officiel délivré par le *Board of I
 | XSLT | 1.0 | Transformation XML → HTML |
 | CSS | 3 | Mise en forme visuelle du rendu |
 | HTML | 5 | Document final lisible dans un navigateur |
+| Python 3 | 3.x | Transformation XSLT + génération PDF (portable) |
 
 ---
 
@@ -48,8 +49,10 @@ academic-transcript/
 │   └── model.jpg               # Modèle original trouvé sur Pinterest
 │
 ├── output/
-│   └── index.html              # Rendu HTML final (ouvrir dans un navigateur)
+│   ├── index.html              # Rendu HTML final (ouvrir dans un navigateur)
+│   └── transcript.pdf          # PDF généré (via make pdf)
 │
+├── transform.py                # Script Python : XSLT + PDF (portable)
 ├── Makefile                    # Automatisation des commandes
 └── README.md                   # Ce fichier
 ```
@@ -60,7 +63,7 @@ academic-transcript/
 
 ### `xml/transcript.xml`
 
-Fichier source central du projet. Il contient l'intégralité des données du relevé de notes : informations de l'établissement émetteur, barème de notation complet (A+ → F), données personnelles de l'étudiant(e), liste des matières avec notes et points GPA, et résultats globaux.
+Fichier source central du projet. Il contient l'intégralité des données du relevé de notes : informations de l'établissement émetteur, barème de notation complet (A → F), données personnelles de l'étudiant(e), liste des matières avec notes et points GPA, et résultats globaux.
 
 Il déclare sa DTD via `<!DOCTYPE academic_transcript SYSTEM "../dtd/transcript.dtd">` et appelle la feuille XSLT via l'instruction de traitement `<?xml-stylesheet ?>`.
 
@@ -82,6 +85,15 @@ Rendu HTML statique pré-généré par la transformation XSLT. Peut être ouvert
 
 > **Note :** Les navigateurs modernes bloquent l'exécution XSLT depuis `file://` pour des raisons de sécurité. Le fichier `output/index.html` est donc fourni pré-transformé pour contourner cette contrainte.
 
+### `transform.py`
+
+Script Python portable gérant deux opérations en une seule commande :
+
+- **Sans argument** : applique la transformation XSLT et génère `output/index.html`
+- **Avec `--pdf`** : fait la même chose, puis génère `output/transcript.pdf` via `weasyprint`
+
+Ce script est la solution retenue pour la **portabilité maximale** : il fonctionne sur Linux, macOS et Windows sans aucune installation système (xsltproc, wkhtmltopdf, etc.), uniquement avec `pip`.
+
 ### `assets/model.jpg`
 
 Image du modèle original utilisé comme référence visuelle pour la reproduction.
@@ -90,74 +102,96 @@ Image du modèle original utilisé comme référence visuelle pour la reproducti
 
 ## Installation et utilisation
 
-### Prérequis
+### Prérequis Python (toutes plateformes)
 
-**Debian/Ubuntu :**
 ```bash
-sudo apt-get update
-sudo apt-get install xsltproc libxml2-utils make
+pip install lxml weasyprint
 ```
 
-**Windows :**
+- `lxml` — moteur XSLT (transformation XML → HTML)
+- `weasyprint` — moteur PDF 100 % Python (pas de binaire système requis)
 
-Plusieurs options selon l'environnement disponible :
+### Prérequis système optionnels (Linux/macOS)
 
-- **WSL (recommandé)** — Windows Subsystem for Linux, puis mêmes commandes que Debian
-- **Chocolatey :**
-  ```powershell
-  choco install xsltproc
-  ```
-- **Saxon HE (Java)** — télécharger sur [saxonica.com](https://www.saxonica.com/download/java.xml), puis :
-  ```bat
-  java -jar saxon-he.jar -s:xml\transcript.xml -xsl:xslt\transcript.xsl -o:output\index.html
-  ```
-- **Python 3 + lxml (universel, aucune installation système requise) :**
-  ```bat
-  pip install lxml
-  python transform.py
-  ```
+```bash
+# Pour make build via xsltproc (plus rapide que Python sur gros fichiers)
+sudo apt-get install xsltproc libxml2-utils make
+
+# wkhtmltopdf N'est PAS requis — weasyprint le remplace
+```
 
 ---
 
 ### Option 1 — Via Makefile (recommandé)
 
 ```bash
-# Transformer XML en HTML et ouvre le résultat
+# Transformer XML → HTML et ouvrir dans le navigateur
 make all
 
-# Transformer XML en HTML uniquement
+# Transformer XML → HTML uniquement
 make build
+
+# Générer le PDF (100% Python, aucun outil système)
+make pdf
 
 # Valider le XML contre la DTD
 make validate
 
-# Ouvrir le rendu dans le navigateur
+# Ouvrir le rendu HTML dans le navigateur
 make open
 
 # Nettoyer les fichiers générés
 make clean
 ```
 
-### Option 2 — Ligne de commande directe
+### Option 2 — Via Python directement
 
-**Debian/Linux/macOS :**
+```bash
+# HTML uniquement
+python3 transform.py
+
+# HTML + PDF
+python3 transform.py --pdf
+```
+
+Fonctionne identiquement sur **Windows**, **macOS** et **Linux** — aucun outil système requis.
+
+### Option 3 — Ligne de commande xsltproc (Linux/macOS)
+
 ```bash
 xsltproc xslt/transcript.xsl xml/transcript.xml > output/index.html
 ```
 
-**Windows (Saxon HE) :**
+### Option 4 — Saxon HE (Windows sans WSL)
+
 ```bat
 java -jar saxon-he.jar -s:xml\transcript.xml -xsl:xslt\transcript.xsl -o:output\index.html
 ```
 
-**Python 3 (universel) :**
-```bash
-python3 transform.py
-```
-
-### Option 3 — Rendu direct sans outil
+### Option 5 — Rendu direct sans outil
 
 Ouvrir directement `output/index.html` dans un navigateur (double-clic ou `Ctrl+O`). Le fichier est pré-généré et ne nécessite aucun outil.
+
+---
+
+## Génération PDF
+
+Le PDF est généré par **`weasyprint`**, une bibliothèque Python pure qui interprète HTML + CSS et produit un PDF fidèle au rendu navigateur — sans dépendance à wkhtmltopdf ou tout autre binaire externe.
+
+```bash
+# Installation unique
+pip install weasyprint
+
+# Génération
+python3 transform.py --pdf
+# → output/transcript.pdf
+
+# Ou via Makefile
+make pdf
+```
+
+> **Pourquoi pas wkhtmltopdf ?**
+> wkhtmltopdf est un binaire natif dont l'installation varie selon l'OS et qui n'est plus maintenu activement. `weasyprint` offre la même fonctionnalité en pur Python, installable sur toutes les plateformes avec un simple `pip install`.
 
 ---
 
@@ -167,7 +201,7 @@ Ouvrir directement `output/index.html` dans un navigateur (double-clic ou `Ctrl+
 # Debian/Linux
 xmllint --valid --noout xml/transcript.xml
 
-# Via Makefile
+# Via Makefile (xmllint ou python/lxml selon disponibilité)
 make validate
 ```
 
